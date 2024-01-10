@@ -1,0 +1,10 @@
+﻿  Character.cpp
+  Event.cpp
+  Link.cpp
+  Object.cpp
+  Story.cpp
+  StoryViewer.cpp
+Story.obj : error LNK2001: 无法解析的外部符号 "public: __cdecl StoryViewer::Link<class StoryViewer::Character,class StoryViewer::Character>::~Link<class StoryViewer::Character,class StoryViewer::Character>(void)" (??1?$Link@VCharacter@StoryViewer@@V12@@StoryViewer@@QEAA@XZ)
+Story.obj : error LNK2001: 无法解析的外部符号 "public: __cdecl StoryViewer::Link<class StoryViewer::Event,class StoryViewer::Event>::~Link<class StoryViewer::Event,class StoryViewer::Event>(void)" (??1?$Link@VEvent@StoryViewer@@V12@@StoryViewer@@QEAA@XZ)
+StoryViewer.obj : error LNK2001: 无法解析的外部符号 "public: __cdecl StoryViewer::Link<class StoryViewer::Character,class StoryViewer::Character>::Link<class StoryViewer::Character,class StoryViewer::Character>(class StoryViewer::Character *,class StoryViewer::Character *,class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> > const &)" (??0?$Link@VCharacter@StoryViewer@@V12@@StoryViewer@@QEAA@PEAVCharacter@1@0AEBV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@@Z)
+D:\J_Ignite\Documents\Codes\Projects\StoryViewer\x64\Release\StoryViewer.exe : fatal error LNK1120: 3 个无法解析的外部命令
