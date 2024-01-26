@@ -9,9 +9,12 @@
 
 #define _Instance_
 #define _String_
+#define _Safe_Instance_(_Obj) _Obj&&
 
 using namespace StoryViewer;
 typedef Link<Character, Character> CharacterLink;
+
+#ifdef __USE_BASIC_WOSTREAM
 std::wostream& operator<<(std::wostream& _wcout, const AttributeList& _attr_list);
 std::wostream& operator<<(std::wostream& _wcout, Link<Character, Character>& _link);
 std::wostream& operator<<(std::wostream& _wcout, Event& _event);
@@ -33,7 +36,7 @@ std::wostream& operator<<(std::wostream& _wcout, Character& _char)
 			_wcout << _char.Aka().operator[](_i);
 			if (_i != _char.Aka().size() - 1)
 			{
-				_wcout << " , ";
+				_wcout << L" , ";
 			}
 		}
 		_wcout << L" )\n ";
@@ -164,8 +167,8 @@ std::wostream& operator<<(std::wostream& _wcout, AttributeList& _attr_list)
 std::wostream& operator<<(std::wostream& _wcout, MultiCharacter& _m_char)
 {
 	_wcout << L"<多元角色>" << _m_char.Name() << L"\n";
-	int count = _m_char.Count();
-	for (int _i = 0; _i < count; ++_i)
+	size_t count = _m_char.Count();
+	for (size_t _i = 0; _i < count; ++_i)
 	{
 		_wcout << L"---------------------------------------------\n";
 		_wcout << L"|           第 " << _i + 1 << L" 个定义（共" << count << L"个）            |\n";
@@ -176,6 +179,7 @@ std::wostream& operator<<(std::wostream& _wcout, MultiCharacter& _m_char)
 	}
 	return _wcout;
 }
+#endif // __USE_BASIC_WOSTREAM
 
 void Initialize()
 {
@@ -187,121 +191,112 @@ void Initialize()
 int main()
 {
 	Initialize();
-	//Discrete Gender({ L"男", L"女" });
-	
-	Character Ivy = Character(L"艾薇", nullptr,
-		AttributeList{
+
+	_Safe_Instance_(Character) Ivy = Character(L"艾薇", nullptr,
+		AttributeList{ 
 			{ L"性别", L"女"},
 			{ L"类型", L"建造者" }
 		}
 	);
-	Character Vanessa = Character(L"凡妮莎", nullptr,
-		AttributeList{
+
+	_Safe_Instance_(Character) Vanessa = Character(L"凡妮莎", nullptr,
+		AttributeList{ 
 			{ L"性别", L"女" },
 			{ L"类型", L"建造者" },
 			{ L"瞳孔颜色", L"蓝"}
 		}
 	);
+
 	MultiCharacter _m_Vanessa = _Instance_ Vanessa;
 
-	//Character VanessaB = Character(L"凡妮莎-恨意", nullptr,
-	//	new AttributeList{
-	//		{ L"性别", L"女" },
-	//		{ L"类型", L"建造者" },
-	//		{ L"瞳孔颜色", L"红"}
-	//	}
-	//);
+	_Safe_Instance_(Character) VanessaB = Character(L"凡妮莎-恨意", nullptr,
+		new AttributeList{
+			{ L"性别", L"女" },
+			{ L"类型", L"建造者" },
+			{ L"瞳孔颜色", L"红"}
+		}
+	);
 
-	Character VanessaB = Character(L"凡妮莎-恨意");
 	_m_Vanessa.SetAsSubCharacter(_Instance_ VanessaB);
-	// VanessaB >> Vanessa;
-	Character Paff(L"Paff", nullptr,
+
+	_Safe_Instance_(Character) Paff = Character(L"Paff", nullptr,
 		new AttributeList{
 			{ L"性别",  L"女" },
 			{ L"类型", L"人类" },
 			{ L"身份", 2 }
-		}), * _ptr_Paff = &Paff;
-	//Character Aroma = Character(L"Aroma", nullptr,
-	//	new AttributeList {
-	//		{ L"性别", L"女" },
-	//		{ L"类型", L"人类" },
-	//		{ L"身份", L"歌手"}
-	//	}
-	//);
+		});
+
+	_Safe_Instance_(Character) Aroma = Character(L"Aroma", nullptr,
+		new AttributeList {
+			{ L"性别", L"女" },
+			{ L"类型", L"人类" },
+			{ L"身份", L"歌手"}
+		}
+	);
+
+	MultiCharacter _m_Paff = _Instance_ Paff;
+	_m_Paff.SetAsSubCharacter(_Instance_ Aroma);
+
 	Ivy << L"AEsir" << L"IV";
 
 	Vanessa << L"V";
 
-	Vanessa[L"实际身份"] = L"我女朋友";
-
-	std::wcout << _m_Vanessa;
-
-	std::wcout << Ivy;
-
-	std::wcout << Paff;
-
-	// auto u = Aroma[L"前世"] >> Paff;
+	std::wcout << Vanessa.ToString();
+	Link<Character, Character> cl(&Ivy, &Vanessa, L"朋友", UNORDERED);
+	std::wcout << cl.ToString();
 
 	Story CYTUSII(L"Cytus II");
 
 	CYTUSII << Ivy << Vanessa << VanessaB << Paff; // 天才！
-	// CYTUSII << u << x << fr;
 
-	Story HONKAI_IMPACT_3 = Story(L"崩坏3");
-
-	Character Bronya = Character(L"布洛妮娅");
-	// SubCharacter Silverwing_Ex = SubCharacter(L"次生银翼", &Bronya, false);
+	std::wcout << CYTUSII.ToString();
 	
-	// std::wcout << HONKAI_IMPACT_3;
-	// understand?
+	CYTUSII.DeleteCharacterByFilter([](Character c) { return c.ContainAKA(L"AEsir"); });
 
-	//WeakValueType w = 1;
-	//std::wcout << static_cast<int>(w);
-	//std::wcout << int(w);
-	//w = 1.2f;
-	//std::wcout << static_cast<double>(w);
-	//w = L"Fuck you";
-	//std::wcout << static_cast<String>(w);
-	//Discrete gender = std::vector<String> { L"Male", L"Female" };
-	//gender = L"Male";
+	std::wcout << CYTUSII.ToString();
 
-	//w = gender;
-	//std::wcout << w;
+	DateTime* date = new DTYearMonthDay(2023, 12, 8);
 
-	//std::wcout << CYTUSII << std::endl;
+	return 0;
+}
 
-	// SwapPtr<Character>(&Ivy, &Vanessa);
 
-	/*std::wcout << L"交换后：" << std::endl;*/
+int _main()
+{
+	OPENFILENAME ofn;       // 结构体用于存储文件对话框的信息
+	TCHAR szFile[MAX_PATH]; // 存储文件路径的缓冲区
 
-	//std::wcout << CYTUSII << std::endl;
+	// 初始化 OPENFILENAME 结构体
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = sizeof(szFile) / sizeof(szFile[0]);
+	ofn.lpstrFilter = L"JPEG Files (*.jpg)\0*.jpg\0All Files (*.*)\0*.*\0";
+	ofn.nFilterIndex = 1;
+	ofn.lpstrTitle = L"选择一个 JPG 图片";
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-	//Story Xianghuo = Story(L"香火");
+	// 打开文件对话框
+	if (GetOpenFileName(&ofn) == TRUE) {
+		// 用户选择了一个文件
+		std::wcout << L"选择的文件路径: " << ofn.lpstrFile << std::endl;
 
-	//Character Suge = Character(L"苏格");
+		// 使用 ShellExecute 打开默认的图片查看器
+		HINSTANCE result = ShellExecute(nullptr, L"open", ofn.lpstrFile, nullptr, nullptr, SW_SHOWNORMAL);
 
-	//Character Wuma = Character(L"吴妈");
-
-	//Character Nvzi = Character(L"陌生女子");
-
-	//Character Airen = Character(L"苏格的爱人");
-
-	//Character& Zhoujing = Airen;
-	//Zhoujing << L"周静";
-	//
-	//Event e = Event(L"苏格被查出少精症.");
-
-	//Character Shiyantian = Character(L"试验田");
-
-	//CharacterLink x = Airen[L"妻子"] >> Suge;
-
-	//Xianghuo << x;
-
-	//Nvzi &= Airen;
-
-	//std::wcout << Airen;
-
-	DTYearMonthDay date = DTYearMonthDay(2023, 12, 8);
+		// 检查执行结果
+		if ((intptr_t)result > 32) {
+			std::wcout << L"成功打开图片!\n";
+		}
+		else {
+			std::wcout << L"无法打开图片。\n";
+		}
+	}
+	else {
+		// 用户取消选择文件
+		std::wcout << L"用户取消选择文件。\n";
+	}
 
 	return 0;
 }

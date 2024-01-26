@@ -24,13 +24,10 @@
     <ClCompile Include="Story.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Issue.cpp">
+    <ClCompile Include="DateTime.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="StoryViewer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DateTime.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,14 +56,14 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Issue.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ValueType.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="LifeCycle.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

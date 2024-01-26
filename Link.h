@@ -7,6 +7,7 @@
 #define _LINK
 #endif
 
+
 namespace StoryViewer
 {
 	enum LINKTYPE
@@ -15,9 +16,15 @@ namespace StoryViewer
 		UNORDERED
 	};
 
-	template<typename T, typename U>
+	// Link <Object> OK!
+	// Link <Object*> NO!
+	// Link <Object&> NO!
+	
+	template<typename T, typename U> // Type T and U must contain the method ToString().
 	class Link : public Object
 	{
+		static_assert(std::is_base_of<Object, T>::value, "T must be a derived class of BaseClass");
+	
 	protected:
 		T* p_front;
 		U* p_back;
@@ -40,38 +47,70 @@ namespace StoryViewer
 		}
 		~Link() { p_front = p_back = nullptr; }
 
-		String& Description()
+		String& Description() _MUTABLE
 		{
 			return description;
 		}
-		LINKTYPE& LinkType()
+		LINKTYPE& LinkType() _MUTABLE
 		{
 			return link_type;
 		}
 
-		void AlterFront(T* _p_new_front)
+		void AlterFront(T* _p_new_front) _MUTABLE
 		{
 			p_front = _p_new_front;
 		}
-		void AlterBack(U* _p_new_back)
+		void AlterBack(U* _p_new_back) _MUTABLE
 		{
 			p_back = _p_new_back;
 		}
-		T* GetFrontPtr()
+		T* GetFrontPtr() _CONST
 		{
 			return p_front;
 		}
-		U* GetBackPtr()
+		U* GetBackPtr() _CONST
 		{
 			return p_back;
 		}
-		T GetFront()
+		T GetFront() _CONST
 		{
 			return *p_front;
 		}
-		U GetBack()
+		U GetBack() _CONST
 		{
 			return *p_back;
+		}
+		T& GetFrontRef() _MUTABLE
+		{
+			return *p_front;
+		}
+		U& GetBackRef() _MUTABLE
+		{
+			return *p_back;
+		}
+		T*& GetFrontPtrRef() _MUTABLE
+		{
+			return p_front;
+		}
+		U*& GetBackPtrRef() _MUTABLE
+		{
+			return p_back;
+		}
+		virtual String ToString() _CONST override
+		{
+			String _ret{};
+			if (this->link_type == UNORDERED)
+				_ret += L"<关系(双向)>";
+			else
+				_ret += L"<关系(单向)>";
+			_ret += L"[";
+			_ret += this->GetFront().ToString();
+			_ret += link_type == ORDERED ? L"---(" : L"<--(";
+			_ret += this->description;
+			_ret += L")-->";
+			_ret += this->GetBack().ToString();
+			_ret += L"]";
+			return _ret;
 		}
 	};
 }

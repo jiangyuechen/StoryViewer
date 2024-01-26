@@ -1,13 +1,23 @@
 #pragma once
 #include "basic.h"
+#include "Object.h"
+
+#ifndef _VALUE_TYPE
+#define _VALUE_TYPE
+#endif
 
 namespace StoryViewer
 {
+#ifdef USE_DISCRETE
 	class DiscreteBase;
 	class Discrete;
+#endif
+
 	class WeakValueType;
+
 	template <typename T>
 	class Nullable;
+
 	enum VALUE_TYPE
 	{
 		UNKNOWN,
@@ -16,14 +26,15 @@ namespace StoryViewer
 		DOUBLE,
 		DISCRETE
 	};
+
 	template <typename T>
-	class Nullable
+	class Nullable : public Object
 	{
 	private:
 		T* val_ptr;
 		bool is_null;
 	public:
-		// static const Nullable<T> NULL_VALUE;
+		// static const void* NULL_VALUE = nullptr;
 		Nullable() noexcept
 		{
 			val_ptr = nullptr;
@@ -34,6 +45,7 @@ namespace StoryViewer
 			val_ptr = new T(_value);
 			is_null = false;
 		}
+		// 使用 nullptr 作为 null 值.
 		Nullable(void* _val_ptr) noexcept
 		{
 			if (_val_ptr == nullptr)
@@ -62,6 +74,19 @@ namespace StoryViewer
 		{
 			return *(this->val_ptr);
 		}
+		T &ValRef() _MUTABLE
+		{
+			return *(this->val_ptr);
+		}
+		T *ValPtr() const
+		{
+			return this->val_ptr;
+		}
+		T *&ValPtrRef() _MUTABLE
+		{
+			return this->val_ptr;
+		}
+
 		T operator*() const
 		{
 			return *(this->val_ptr);
@@ -71,6 +96,14 @@ namespace StoryViewer
 		{
 			return (!(this->is_null)) && (this->Val() == _right.Val());
 		}
+		bool operator!=(const Nullable<T>& _right) const
+		{
+			return !(this->operator==(_right));
+		}
+		bool operator!() const
+		{
+			return this->IsNull();
+		}
 
 		void Reset()
 		{
@@ -78,6 +111,7 @@ namespace StoryViewer
 			this->val_ptr = nullptr;
 			is_null = true;
 		}
+		
 		//static bool operator==(const Nullable<T>& _x, const Nullable<T>& _y) const
 		//{
 		//	return !_x.IsNull() && !_y.IsNull() && _x.Val() == _y.Val()
@@ -113,12 +147,12 @@ namespace StoryViewer
 	};
 #endif
 
-	class WeakValueType
+	class WeakValueType : public Object
 	{
 	private:
-		int* value_int;
-		double* value_double;
-		String* value_string;
+		int* val_int;
+		double* val_double;
+		String* val_string;
 #ifdef USE_DISCRETE
 		Discrete* value_discrete;
 #endif
@@ -127,16 +161,16 @@ namespace StoryViewer
 		{
 			if (_do_delete)
 			{
-				delete value_int;
-				delete value_double;
-				delete value_string;
+				delete val_int;
+				delete val_double;
+				delete val_string;
 #ifdef USE_DISCRETE
 				delete value_discrete;
 #endif
 			}
-			value_int = nullptr;
-			value_double = nullptr;
-			value_string = nullptr;
+			val_int = nullptr;
+			val_double = nullptr;
+			val_string = nullptr;
 #ifdef USE_DISCRETE
 			value_discrete = nullptr;
 #endif
@@ -151,13 +185,13 @@ namespace StoryViewer
 			switch (this->type)
 			{
 			case INTEGER:
-				this->value_int = new int(int(_refer));
+				this->val_int = new int(int(_refer));
 				break;
 			case STRING:
-				this->value_string = new String(String(_refer));
+				this->val_string = new String(String(_refer));
 				break;
 			case DOUBLE:
-				this->value_double = new double(double(_refer));
+				this->val_double = new double(double(_refer));
 				break;
 			}
 		}
@@ -168,13 +202,13 @@ namespace StoryViewer
 			switch (this->type)
 			{
 			case INTEGER:
-				this->value_int = new int(int(_refer));
+				this->val_int = new int(int(_refer));
 				break;
 			case STRING:
-				this->value_string = new String(String(_refer));
+				this->val_string = new String(String(_refer));
 				break;
 			case DOUBLE:
-				this->value_double = new double(double(_refer));
+				this->val_double = new double(double(_refer));
 				break;
 			}
 		}
@@ -182,25 +216,25 @@ namespace StoryViewer
 		WeakValueType(const int& _value_int)
 		{
 			_Reset(false);
-			value_int = new int(_value_int);
+			val_int = new int(_value_int);
 			type = INTEGER;
 		}
 		WeakValueType(const double& _value_double)
 		{
 			_Reset(false);
-			value_double = new double(_value_double);
+			val_double = new double(_value_double);
 			type = DOUBLE;
 		}
 		WeakValueType(const wchar_t _value_string[])
 		{
 			_Reset(false);
-			value_string = new String(_value_string);
+			val_string = new String(_value_string);
 			type = STRING;
 		}
 		WeakValueType(const String& _value_string)
 		{
 			_Reset(false);
-			value_string = new String(_value_string);
+			val_string = new String(_value_string);
 			type = STRING;
 		}
 		~WeakValueType()
@@ -213,22 +247,22 @@ namespace StoryViewer
 		void operator=(const int& _value_int)
 		{
 			_Reset();
-			value_int = new int(_value_int);
+			val_int = new int(_value_int);
 		}
 		void operator=(const double& _value_double)
 		{
 			_Reset();
-			value_double = new double(_value_double);
+			val_double = new double(_value_double);
 		}
 		void operator=(const String& _value_string)
 		{
 			_Reset();
-			value_string = new String(_value_string);
+			val_string = new String(_value_string);
 		}
 		void operator=(const wchar_t _value_string[])
 		{
 			_Reset();
-			value_string = new String(_value_string);
+			val_string = new String(_value_string);
 		}
 		bool operator==(const WeakValueType& _comp)
 		{
@@ -236,15 +270,32 @@ namespace StoryViewer
 		}
 		explicit operator int() const
 		{
-			return *value_int;
+			return *val_int;
 		}
 		explicit operator double() const
 		{
-			return *value_double;
+			return *val_double;
 		}
 		explicit operator String() const
 		{
-			return *value_string;
+			return *val_string;
+		}
+		virtual String ToString() const override
+		{
+			String _ret{};
+			switch (this->type)
+			{
+			case INTEGER:
+				_ret += std::to_wstring(*val_int);
+				break;
+			case DOUBLE:
+				_ret += std::to_wstring(*val_double);
+				break;
+			case STRING:
+				_ret += (*val_string);
+				break;
+			}
+			return _ret;
 		}
 	};
 	

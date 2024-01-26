@@ -131,7 +131,6 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="Event.cpp" />
-    <ClCompile Include="Issue.cpp" />
     <ClCompile Include="Story.cpp" />
     <ClCompile Include="StoryViewer.cpp" />
   </ItemGroup>
@@ -140,13 +139,15 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="DateTime.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="Issue.h" />
     <ClInclude Include="LifeCycle.h" />
     <ClInclude Include="Link.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Story.h" />
     <ClInclude Include="ValueType.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

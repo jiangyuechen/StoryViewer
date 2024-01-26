@@ -76,5 +76,7 @@ namespace StoryViewer
 		Story& operator<<(Link<Character, Character>& _tar_link);
 
 		CharacterCollection AutoConfigureRelatedCharacter(Event* _tar_event);
+		
+		virtual String ToString() const override;
 	};
 }

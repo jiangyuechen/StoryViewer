@@ -52,6 +52,47 @@ bool Character::ContainKey(const String& _key) const
 	return false;
 }
 
+String Character::ToString() const
+{
+	String _ret{};
+	_ret += L"<角色>";
+	_ret += this->name;
+	if (this->aka.size() != 0)
+	{
+		_ret += L" ( 又名 ";
+		for (size_t _i = 0; _i < this->aka.size(); ++_i)
+		{
+			_ret += this->aka[_i];
+			if (_i != this->aka.size() - 1)
+			{
+				_ret += L" , ";
+			}
+		}
+		_ret += L" )\n";
+	}
+	_ret += L"---------------- ";
+	_ret += this->name;
+	_ret += L" 的属性 ----------------\n";
+	size_t _max_key_length = 0;
+	const size_t _buffer = 8;
+	for (const auto& _iter : this->attributes)
+	{
+		_max_key_length = MAX(_max_key_length, _iter.first.length());
+	}
+	_ret += L"键";
+	_ret += String(_max_key_length + _buffer, L' ');
+	_ret += L"值\n";
+	_ret += L"-----------------------------------------\n";
+	for (const auto& _iter : this->attributes)
+	{
+		_ret += _iter.first;
+		_ret += String(_max_key_length + _buffer - _iter.first.length(), L' ');
+		_ret += _iter.second.ToString();
+		_ret += L"\n";
+	}
+	return _ret;
+}
+
 bool Character::ContainKeyValue(const Attribute& _attrib) const
 {
 	if (attributes.empty())
@@ -254,7 +295,7 @@ CharacterCollection& MultiCharacter::SubCharacters()
 	return this->sub_characters;
 }
 
-Nullable<Character> MultiCharacter::Getter(int _code) const
+Nullable<Character> MultiCharacter::Getter(size_t _code) const
 {
 	if (_code == 0)
 		return (*this);
@@ -263,12 +304,48 @@ Nullable<Character> MultiCharacter::Getter(int _code) const
 	else return nullptr;
 }
 
-Nullable<Character> StoryViewer::MultiCharacter::operator[](int _code) const
+Nullable<Character> MultiCharacter::operator[](size_t _code) const
 {
 	return Getter(_code);
 }
 
-int MultiCharacter::Count() const
+size_t MultiCharacter::Count() const
 {
 	return sub_characters.size() + 1;
+}
+
+void MultiCharacter::operator+=(Character& _tar_char)
+{
+	this->SetAsSubCharacter(_tar_char);
+}
+
+String MultiCharacter::ToString() const
+{
+	String _ret{};
+	_ret += L"<多元角色>";
+	_ret += this->name;
+	_ret += L"\n";
+	for (size_t _i = 0; _i < this->Count(); ++_i)
+	{
+		_ret += L"---------------------------------------------\n";
+		_ret += L"|           第 ";
+		_ret += std::to_wstring(_i + 1);
+		_ret += L" 个定义（共";
+		_ret += std::to_wstring(this->Count());
+		_ret += L"个)";
+		_ret += (*this)[_i].Val().ToString();
+		_ret += L"\n";
+	}
+	return _ret;
+}
+
+String CharacterAttributeAdder::ToString() const
+{
+	String _ret{};
+	_ret += L"<角色属性添加器>\n";
+	_ret += L"目标角色:";
+	_ret += this->tar_char->Name();
+	_ret += L"\n目标属性:";
+	_ret += this->key;
+	return _ret;
 }

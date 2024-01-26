@@ -45,6 +45,7 @@ namespace StoryViewer
 		static bool use_typical_calendar;
 		virtual void Refresh();
 		static bool IsOddYear(int _year);
+		virtual String ToString() const override;
 	};
 	
 	class DTYearMonthDay : public DateTime
@@ -61,13 +62,15 @@ namespace StoryViewer
 		DTYearMonthDay();
 		DTYearMonthDay(int _year, int _month, int _day, DAY_PERIOD _day_period = BEFORE_DAWN, bool _use_typical_calendar = true);
 		virtual void Refresh(); // override
-		bool operator<(const DTYearMonthDay& _dt);
-		bool operator==(const DTYearMonthDay& _dt);
-		bool operator<=(const DTYearMonthDay& _dt);
-		bool operator>(const DTYearMonthDay& _dt);
-		bool operator>=(const DTYearMonthDay& _dt);
-		bool operator!=(const DTYearMonthDay& _dt);
+		bool operator<(const DTYearMonthDay& _dt) const;
+		bool operator==(const DTYearMonthDay& _dt) const;
+		bool operator<=(const DTYearMonthDay& _dt) const;
+		bool operator>(const DTYearMonthDay& _dt) const;
+		bool operator>=(const DTYearMonthDay& _dt) const;
+		bool operator!=(const DTYearMonthDay& _dt) const;
 		DTYearMonthDay NextDay(int _multiple = 1);
 		DTYearMonthDay PrevDay(int _multiple = 1);
+
+		virtual String ToString() const override;
 	};
 }

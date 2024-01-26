@@ -64,6 +64,10 @@ namespace StoryViewer
 
 		bool ContainAKA(const String &_aka);
 		bool ContainKey(const String &_key) const;
+		
+		// Override
+		virtual String ToString() const override;
+
 
 #ifdef _USE_CHARACTER_LINKER_OPERATOR
 		CharacterLinker operator[](const String &_desc);
@@ -100,12 +104,15 @@ namespace StoryViewer
 	class CharacterAttributeAdder : public Object
 	{
 	protected:
-		Character* tar_char;
+		mutable Character* tar_char;
 		String key;
 	public:
 		CharacterAttributeAdder(Character* _tar_char, const String& _key);
 		void operator=(WeakValueType val);
+
+		virtual String ToString() const override;
 	};
+
 	class MultiCharacter : public Character
 	{
 		CharacterCollection sub_characters;
@@ -120,8 +127,11 @@ namespace StoryViewer
 		~MultiCharacter();
 		void SetAsSubCharacter(Character&);
 		CharacterCollection& SubCharacters();
-		Nullable<Character> Getter(int _code) const;
-		Nullable<Character> operator[](int _code) const;
-		int Count() const;
+		Nullable<Character> Getter(size_t _code) const;
+		Nullable<Character> operator[](size_t _code) const;
+		size_t Count() const;
+		void operator+=(Character&);
+
+		virtual String ToString() const override;
 	};
 }

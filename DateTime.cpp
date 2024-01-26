@@ -16,7 +16,7 @@ bool DateTime::use_typical_calendar = true;
 
 DAY_PERIOD DateTime::last_day_period = DAY_PERIOD::BEFORE_DAWN;
 
-bool DTYearMonthDay::operator<(const DTYearMonthDay& _dt)
+bool DTYearMonthDay::operator<(const DTYearMonthDay& _dt) const
 {
 	if (this->year == _dt.year)
 	{
@@ -53,7 +53,7 @@ DAY_PERIOD& DTYearMonthDay::DayPeriod()
 	return this->day_period;
 }
 
-bool DTYearMonthDay::operator==(const DTYearMonthDay& _dt)
+bool DTYearMonthDay::operator==(const DTYearMonthDay& _dt) const
 {
 	return this->year == _dt.year
 		&& this->month == _dt.month
@@ -61,7 +61,7 @@ bool DTYearMonthDay::operator==(const DTYearMonthDay& _dt)
 		&& this->day_period == _dt.day_period;
 }
 
-bool DTYearMonthDay::operator<=(const DTYearMonthDay& _dt)
+bool DTYearMonthDay::operator<=(const DTYearMonthDay& _dt) const
 {
 	return (*this) < _dt || (*this) == _dt;
 }
@@ -76,7 +76,7 @@ DTYearMonthDay::DTYearMonthDay()
 	this->Refresh();
 }
 
-bool DTYearMonthDay::operator>(const DTYearMonthDay& _dt)
+bool DTYearMonthDay::operator>(const DTYearMonthDay& _dt) const
 {
 	return !((*this) <= _dt);
 }
@@ -91,12 +91,12 @@ DTYearMonthDay::DTYearMonthDay(int _year, int _month, int _day, DAY_PERIOD _day_
 	this->Refresh();
 }
 
-bool DTYearMonthDay::operator>=(const DTYearMonthDay& _dt)
+bool DTYearMonthDay::operator>=(const DTYearMonthDay& _dt) const
 {
 	return !((*this) < _dt);
 }
 
-bool DTYearMonthDay::operator!=(const DTYearMonthDay& _dt)
+bool DTYearMonthDay::operator!=(const DTYearMonthDay& _dt) const
 {
 	return !((*this) == _dt);
 }
@@ -169,7 +169,28 @@ bool DateTime::IsOddYear(int _year)
 		return (_year % 4 == 0);
 }
 
+String DateTime::ToString() const
+{
+	String _ret{};
+	_ret += L"<日期>";
+	return _ret;
+}
+
 void DateTime::Refresh()
 {
 
+}
+
+String DTYearMonthDay::ToString() const
+{
+	String _ret{};
+
+	_ret += L"<日期>";
+	_ret += std::to_wstring(this->year);
+	_ret += L".";
+	_ret += std::to_wstring(this->month);
+	_ret += L".";
+	_ret += std::to_wstring(this->day);
+
+	return _ret;
 }

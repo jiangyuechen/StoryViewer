@@ -22,5 +22,6 @@ namespace StoryViewer
 		}
 		Object() {}
 		virtual ~Object() {}
+		virtual String ToString() const { return L"<¸ùÀà>"; }
 	};
 }
