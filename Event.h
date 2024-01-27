@@ -3,7 +3,6 @@
 #include "Object.h"
 #include "Character.h"
 #include "DateTime.h"
-#include "Issue.h"
 
 #ifndef _EVENT
 #define _EVENT
