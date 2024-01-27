@@ -2,3 +2,10 @@
 x64/
 *.exe
 *.ipch
+*.vcxproj
+*.sln
+*.hint
+*.vcxproj.filters
+*.vcxproj.user
+*.dll
+*.lib
