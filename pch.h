@@ -2,11 +2,6 @@
 #define _PCH_H
 #endif
 
-#include <iostream>
-#include <Windows.h>
-#include <iomanip>
-#include <commdlg.h>
-
 #include "basic.h"
 #include "ValueType.h"
 // #include "ValueType.cpp"
@@ -17,3 +12,4 @@
 #include "Story.h"
 #include "Link.h"
 #include "DateTime.h"
+#include "Resource.h"

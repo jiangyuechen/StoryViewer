@@ -179,7 +179,7 @@ std::wostream& operator<<(std::wostream& _wcout, MultiCharacter& _m_char)
 	}
 	return _wcout;
 }
-#endif // __USE_BASIC_WOSTREAM
+#endif /* __USE_BASIC_WOSTREAM */ 
 
 void Initialize()
 {
@@ -256,6 +256,19 @@ int main()
 	std::wcout << CYTUSII.ToString();
 
 	DateTime* date = new DTYearMonthDay(2023, 12, 8);
+
+	Resource rds = Resource(L"D:\\J_Ignite\\Pictures\\avatar1.png");
+	
+	std::wcout << rds.ToString();
+
+	try
+	{
+		rds.Open();
+	}
+	catch (std::exception& err)
+	{
+		std::cerr << err.what();
+	}
 
 	return 0;
 }

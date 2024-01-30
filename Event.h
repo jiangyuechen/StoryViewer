@@ -24,10 +24,10 @@ namespace StoryViewer
 		Event(const String& _name = L"<NO-NAME>",const String& _description = L"<NO-DESCRIPTION>", Nullable<CharacterCollection> _p_related_characters = nullptr, Nullable<DateTime> _p_date_time = nullptr);
 		~Event();
 
-		String& Description();
-		String& Name();
-		CharacterCollection& RelatedCharacters();
-		Nullable<DateTime>& Date_Time();
+		String& Description() _MUTABLE;
+		String& Name() _MUTABLE;
+		CharacterCollection& RelatedCharacters() _MUTABLE;
+		Nullable<DateTime>& Date_Time() _MUTABLE;
 
 		void AddCharacter(Character& _char);
 		bool ContainCharacter(const String& _name) const;

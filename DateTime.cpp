@@ -6,12 +6,12 @@ using namespace StoryViewer;
 const int day_count_of_month_even[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 const int day_count_of_month_odd[13] = { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-int DateTime::last_year = MINIMUM_DATETIME;
-int DateTime::last_month = MINIMUM_DATETIME;
-int DateTime::last_day = MINIMUM_DATETIME;
-int DateTime::last_hour = MINIMUM_DATETIME;
-int DateTime::last_minute = MINIMUM_DATETIME;
-int DateTime::last_second = MINIMUM_DATETIME;
+time_t DateTime::last_year = MINIMUM_DATETIME;
+time_t DateTime::last_month = MINIMUM_DATETIME;
+time_t DateTime::last_day = MINIMUM_DATETIME;
+time_t DateTime::last_hour = MINIMUM_DATETIME;
+time_t DateTime::last_minute = MINIMUM_DATETIME;
+time_t DateTime::last_second = MINIMUM_DATETIME;
 bool DateTime::use_typical_calendar = true;
 
 DAY_PERIOD DateTime::last_day_period = DAY_PERIOD::BEFORE_DAWN;
@@ -36,15 +36,15 @@ bool DTYearMonthDay::operator<(const DTYearMonthDay& _dt) const
 		return this->year < _dt.year;
 }
 
-int& DTYearMonthDay::Year()
+time_t& DTYearMonthDay::Year()
 {
 	return this->year;
 }
-int& DTYearMonthDay::Month()
+time_t& DTYearMonthDay::Month()
 {
 	return this->month;
 }
-int& DTYearMonthDay::Day()
+time_t& DTYearMonthDay::Day()
 {
 	return this->day;
 }
@@ -81,7 +81,7 @@ bool DTYearMonthDay::operator>(const DTYearMonthDay& _dt) const
 	return !((*this) <= _dt);
 }
 
-DTYearMonthDay::DTYearMonthDay(int _year, int _month, int _day, DAY_PERIOD _day_period, bool _use_typical_calendar)
+DTYearMonthDay::DTYearMonthDay(time_t _year, time_t _month, time_t _day, DAY_PERIOD _day_period, bool _use_typical_calendar)
 {
 	year = _year;
 	month = _month;
@@ -110,10 +110,10 @@ void DTYearMonthDay::Refresh()
 	DateTime::last_day_period = MAX(DateTime::last_day_period, day_period);
 }
 
-DTYearMonthDay DTYearMonthDay::NextDay(int _multiple)
+DTYearMonthDay DTYearMonthDay::NextDay(size_t _multiple)
 {
 	DTYearMonthDay _ret = (*this);
-	for (int _i = 0; _i < _multiple; ++_i)
+	for (size_t _i = 0ull; _i < _multiple; ++_i)
 	{
 		++_ret.Day();
 		if (
@@ -126,10 +126,10 @@ DTYearMonthDay DTYearMonthDay::NextDay(int _multiple)
 		)
 		{
 			++_ret.Month();
-			_ret.Day() = 1;
-			if (_ret.Month() > 12)
+			_ret.Day() = 1ll;
+			if (_ret.Month() > 12ll)
 			{
-				_ret.Month() = 1;
+				_ret.Month() = 1ll;
 				++_ret.Year();
 			}
 		}
@@ -138,19 +138,19 @@ DTYearMonthDay DTYearMonthDay::NextDay(int _multiple)
 }
 
 
-DTYearMonthDay DTYearMonthDay::PrevDay(int _multiple)
+DTYearMonthDay DTYearMonthDay::PrevDay(size_t _multiple)
 {
 	DTYearMonthDay _ret = (*this);
-	for (int _i = 0; _i < _multiple; ++_i)
+	for (size_t _i = 0ull; _i < _multiple; ++_i)
 	{
 		--_ret.Day();
-		if (_ret.Day() <= 0)
+		if (_ret.Day() <= 0ll)
 		{
 			--_ret.Month();
-			if (_ret.Month() < 0)
+			if (_ret.Month() < 0ll)
 			{
 				--_ret.Year();
-				_ret.Month() = 12;
+				_ret.Month() = 12ll;
 			}
 			_ret.Day() =
 				IsOddYear(_ret.Year()) ?
@@ -161,12 +161,12 @@ DTYearMonthDay DTYearMonthDay::PrevDay(int _multiple)
 	return _ret;
 }
 
-bool DateTime::IsOddYear(int _year)
+bool DateTime::IsOddYear(time_t _year)
 {
-	if (_year % 100 == 0)
-		return (_year % 400 == 0);
+	if (_year % 100ll == 0ll)
+		return (_year % 400ll == 0ll);
 	else
-		return (_year % 4 == 0);
+		return (_year % 4ll == 0ll);
 }
 
 String DateTime::ToString() const
@@ -176,10 +176,7 @@ String DateTime::ToString() const
 	return _ret;
 }
 
-void DateTime::Refresh()
-{
-
-}
+// void DateTime::Refresh() = 0;
 
 String DTYearMonthDay::ToString() const
 {

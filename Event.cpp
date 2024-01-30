@@ -66,7 +66,7 @@ String Event::ToString() const
 	if (!this->date_time.IsNull())
 	{
 		_ret += L" (";
-		_ret += date_time.Val().ToString();
+		_ret += date_time.ValPtr()->ToString();
 		_ret += L")";
 	}
 	_ret += L" : ";

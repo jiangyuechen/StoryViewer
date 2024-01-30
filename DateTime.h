@@ -40,11 +40,14 @@ namespace StoryViewer
 	class DateTime : public Object // abstract
 	{
 	public:
-		static int last_year, last_month, last_day, last_hour, last_minute, last_second;
+		static bool IsOddYear(time_t _year);
+
+		static time_t last_year, last_month, last_day, last_hour, last_minute, last_second;
+		
 		static DAY_PERIOD last_day_period;
 		static bool use_typical_calendar;
-		virtual void Refresh();
-		static bool IsOddYear(int _year);
+		virtual void Refresh() = 0;
+		
 		virtual String ToString() const override;
 	};
 	
@@ -52,15 +55,15 @@ namespace StoryViewer
 	{
 	private:
 		// DayPeriod DayPeriodConverter(int _num);
-		int year, month, day;
+		time_t year, month, day;
 		DAY_PERIOD day_period;
 	public:
-		int& Year();
-		int& Month();
-		int& Day();
-		DAY_PERIOD& DayPeriod();
+		time_t& Year() _MUTABLE;
+		time_t& Month() _MUTABLE;
+		time_t& Day() _MUTABLE;
+		DAY_PERIOD& DayPeriod() _MUTABLE;
 		DTYearMonthDay();
-		DTYearMonthDay(int _year, int _month, int _day, DAY_PERIOD _day_period = BEFORE_DAWN, bool _use_typical_calendar = true);
+		DTYearMonthDay(time_t _year, time_t _month, time_t _day, DAY_PERIOD _day_period = BEFORE_DAWN, bool _use_typical_calendar = true);
 		virtual void Refresh(); // override
 		bool operator<(const DTYearMonthDay& _dt) const;
 		bool operator==(const DTYearMonthDay& _dt) const;
@@ -68,8 +71,8 @@ namespace StoryViewer
 		bool operator>(const DTYearMonthDay& _dt) const;
 		bool operator>=(const DTYearMonthDay& _dt) const;
 		bool operator!=(const DTYearMonthDay& _dt) const;
-		DTYearMonthDay NextDay(int _multiple = 1);
-		DTYearMonthDay PrevDay(int _multiple = 1);
+		DTYearMonthDay NextDay(size_t _multiple = 1);
+		DTYearMonthDay PrevDay(size_t _multiple = 1);
 
 		virtual String ToString() const override;
 	};

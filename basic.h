@@ -18,11 +18,18 @@
 #endif
 
 #include <iostream>
+#include <fstream>
+#include <Windows.h>
+#include <iomanip>
+#include <commdlg.h>
+#include <iostream>
 #include <vector>
 #include <string>
 #include <map>
 #include <list>
 #include <functional>
+#include <io.h>
+#include <exception>
 
 #ifndef MAX
 #define MAX(a, b) ((a) > (b) ? (a) : (b))

@@ -70,6 +70,10 @@ namespace StoryViewer
 		}
 		// void operator=(T& _ref_value);
 
+		/// <summary>
+		/// Returns the stored value.
+		/// Tips: If T is an abstract class, or you want to implement polymorphic characteristics, use ValPtr() instead of Val().
+		/// </summary>
 		T Val() const
 		{
 			return *(this->val_ptr);
@@ -78,6 +82,10 @@ namespace StoryViewer
 		{
 			return *(this->val_ptr);
 		}
+		/// <summary>
+		/// Returns the pointer of the stored value.
+		/// Tips: If T is an abstract class, or you want to implement polymorphic characteristics, use ValPtr() instead of Val().
+		/// </summary>
 		T *ValPtr() const
 		{
 			return this->val_ptr;
