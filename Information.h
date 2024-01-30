@@ -3,13 +3,13 @@
 #include "basic.h"
 #include "Object.h"
 
-#ifndef _RESOURCE
-#define _RESOURCE
+#ifndef _INFORMATION
+#define _INFORMATION
 #endif
 
 namespace StoryViewer
 {
-	class Resource;
+	class Information;
 
 	enum FILE_TYPE
 	{
@@ -20,7 +20,7 @@ namespace StoryViewer
 		VIDEO
 	};
 
-	class Resource : public Object
+	class Information : public Object
 	{
 	protected:
 		FILE_TYPE file_type;
@@ -29,8 +29,8 @@ namespace StoryViewer
 	public:
 		static bool use_inline; // Open .txt file in the console instead of notepad.
 		
-		Resource();
-		Resource(String);
+		Information();
+		Information(String);
 
 		String GetFileDir() const;
 		void SetFileDir(String) _MUTABLE;

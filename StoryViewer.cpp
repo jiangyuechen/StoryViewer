@@ -257,7 +257,7 @@ int main()
 
 	DateTime* date = new DTYearMonthDay(2023, 12, 8);
 
-	Resource rds = Resource(L"D:\\J_Ignite\\Pictures\\avatar1.png");
+	Information rds = Information(L"D:\\J_Ignite\\Pictures\\avatar1.png");
 	
 	std::wcout << rds.ToString();
 

@@ -12,4 +12,4 @@
 #include "Story.h"
 #include "Link.h"
 #include "DateTime.h"
-#include "Resource.h"
+#include "Information.h"

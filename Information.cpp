@@ -1,14 +1,14 @@
-#include "Resource.h"
+#include "Information.h"
 
 using namespace StoryViewer;
 
-bool Resource::use_inline = false;
+bool Information::use_inline = false;
 
-Resource::Resource()
+Information::Information()
 	: Object(), file_dir(), file_type(ANY)
 {}
 
-Resource::Resource(String _dir)
+Information::Information(String _dir)
 	: Object(), file_dir(_dir)
 {
 	//if (!_Valid(_dir))
@@ -31,12 +31,12 @@ Resource::Resource(String _dir)
 		file_type = ANY;
 }
 
-String Resource::GetFileDir() const
+String Information::GetFileDir() const
 {
 	return file_dir;
 }
 
-void Resource::SetFileDir(String _dir)
+void Information::SetFileDir(String _dir)
 {
 	//if (!_Valid(_dir))
 	//{
@@ -60,13 +60,13 @@ void Resource::SetFileDir(String _dir)
 	
 }
 
-bool Resource::_Valid(String _dir)
+bool Information::_Valid(String _dir)
 {
 	std::wifstream _tester(_dir.c_str());
 	return _tester.good();
 }
 
-bool Resource::Open()
+bool Information::Open()
 {
 	if (!_Valid(this->file_dir))
 	{
@@ -77,7 +77,7 @@ bool Resource::Open()
 	return ((intptr_t)_res > 32);
 }
 
-String Resource::ToString() const
+String Information::ToString() const
 {
 	String _ret{};
 	_ret += L"<нд╪Ч";
