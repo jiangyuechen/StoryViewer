@@ -52,11 +52,13 @@ bool Character::ContainKey(const String& _key) const
 	return false;
 }
 
-String Character::ToString() const
+String Character::ToString(bool _detailed) const
 {
 	String _ret{};
 	_ret += L"<角色>";
 	_ret += this->name;
+	if (!_detailed)
+		return _ret;
 	if (this->aka.size() != 0)
 	{
 		_ret += L" ( 又名 ";
@@ -184,7 +186,7 @@ bool Character::AddAKA(const String& _aka)
 		return false;
 }
 
-bool Character::ContainAKA(const String& _aka)
+bool Character::ContainAKA(const String& _aka) const
 {
 	for (const auto& _iter : aka)
 	{
@@ -319,7 +321,7 @@ void MultiCharacter::operator+=(Character& _tar_char)
 	this->SetAsSubCharacter(_tar_char);
 }
 
-String MultiCharacter::ToString() const
+String MultiCharacter::ToString(bool _detailed) const
 {
 	String _ret{};
 	_ret += L"<多元角色>";
@@ -339,7 +341,7 @@ String MultiCharacter::ToString() const
 	return _ret;
 }
 
-String CharacterAttributeAdder::ToString() const
+String CharacterAttributeAdder::ToString(bool _detailed) const
 {
 	String _ret{};
 	_ret += L"<角色属性添加器>\n";

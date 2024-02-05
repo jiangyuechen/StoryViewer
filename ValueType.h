@@ -8,6 +8,7 @@
 
 namespace StoryViewer
 {
+	typedef StringList Collection;
 #ifdef USE_DISCRETE
 	class DiscreteBase;
 	class Discrete;
@@ -24,6 +25,7 @@ namespace StoryViewer
 		INTEGER,
 		STRING,
 		DOUBLE,
+		COLLECTION,
 		DISCRETE
 	};
 
@@ -40,9 +42,19 @@ namespace StoryViewer
 			val_ptr = nullptr;
 			is_null = true;
 		}
-		Nullable(T _value) noexcept
+		//Nullable(T _value) noexcept
+		//{
+		//	val_ptr = new T(_value);
+		//	is_null = false;
+		//}
+		Nullable(const T& _value_ref) noexcept
 		{
-			val_ptr = new T(_value);
+			val_ptr = new T(_value_ref);
+			is_null = false;
+		}
+		Nullable(T&& _rvalue_ref) noexcept
+		{
+			val_ptr = new T(_rvalue_ref);
 			is_null = false;
 		}
 		// 使用 nullptr 作为 null 值.
@@ -62,7 +74,7 @@ namespace StoryViewer
 		Nullable(Nullable<T>& _ref) = default;
 		bool IsNull() const { return this->is_null; }
 
-		void operator=(T _value)
+		void operator=(const T& _value)
 		{
 			delete val_ptr;
 			this->val_ptr = new T(_value);
@@ -76,33 +88,36 @@ namespace StoryViewer
 		/// </summary>
 		T Val() const
 		{
+			PTR_VALIDATE(val_ptr);
 			return *(this->val_ptr);
 		}
-		T &ValRef() _MUTABLE
+		T& ValRef() _MUTABLE
 		{
+			PTR_VALIDATE(val_ptr);
 			return *(this->val_ptr);
 		}
 		/// <summary>
 		/// Returns the pointer of the stored value.
 		/// Tips: If T is an abstract class, or you want to implement polymorphic characteristics, use ValPtr() instead of Val().
 		/// </summary>
-		T *ValPtr() const
+		T* ValPtr() const
 		{
 			return this->val_ptr;
 		}
-		T *&ValPtrRef() _MUTABLE
+		T*& ValPtrRef() _MUTABLE
 		{
 			return this->val_ptr;
 		}
 
 		T operator*() const
 		{
+			PTR_VALIDATE(val_ptr);
 			return *(this->val_ptr);
 		}
 
 		bool operator==(const Nullable<T>& _right) const
 		{
-			return (!(this->is_null)) && (this->Val() == _right.Val());
+			return !this->IsNull() && !_right.IsNull() && this->Val() == _right.Val();
 		}
 		bool operator!=(const Nullable<T>& _right) const
 		{
@@ -154,13 +169,14 @@ namespace StoryViewer
 		operator String() const;
 	};
 #endif
-
 	class WeakValueType : public Object
 	{
+
 	private:
 		int* val_int;
 		double* val_double;
 		String* val_string;
+		Collection* val_collection;
 #ifdef USE_DISCRETE
 		Discrete* value_discrete;
 #endif
@@ -172,6 +188,7 @@ namespace StoryViewer
 				delete val_int;
 				delete val_double;
 				delete val_string;
+				delete val_collection;
 #ifdef USE_DISCRETE
 				delete value_discrete;
 #endif
@@ -179,6 +196,7 @@ namespace StoryViewer
 			val_int = nullptr;
 			val_double = nullptr;
 			val_string = nullptr;
+			val_collection = nullptr;
 #ifdef USE_DISCRETE
 			value_discrete = nullptr;
 #endif
@@ -193,14 +211,16 @@ namespace StoryViewer
 			switch (this->type)
 			{
 			case INTEGER:
-				this->val_int = new int(int(_refer));
+				this->val_int = new int(static_cast<int>(_refer));
 				break;
 			case STRING:
-				this->val_string = new String(String(_refer));
+				this->val_string = new String(static_cast<String>(_refer));
 				break;
 			case DOUBLE:
-				this->val_double = new double(double(_refer));
+				this->val_double = new double(static_cast<double>(_refer));
 				break;
+			case COLLECTION:
+				this->val_collection = new Collection(static_cast<Collection>(_refer));
 			}
 		}
 		WeakValueType(WeakValueType& _refer) noexcept
@@ -210,14 +230,16 @@ namespace StoryViewer
 			switch (this->type)
 			{
 			case INTEGER:
-				this->val_int = new int(int(_refer));
+				this->val_int = new int(static_cast<int>(_refer));
 				break;
 			case STRING:
-				this->val_string = new String(String(_refer));
+				this->val_string = new String(static_cast<String>(_refer));
 				break;
 			case DOUBLE:
-				this->val_double = new double(double(_refer));
+				this->val_double = new double(static_cast<double>(_refer));
 				break;
+			case COLLECTION:
+				this->val_collection = new Collection(static_cast<Collection>(_refer));
 			}
 		}
 		// WeakValueType(WeakValueType&& _right_refer) noexcept;
@@ -245,6 +267,12 @@ namespace StoryViewer
 			val_string = new String(_value_string);
 			type = STRING;
 		}
+		WeakValueType(const Collection& _value_collection)
+		{
+			_Reset(false);
+			val_collection = new Collection(_value_collection);
+			type = COLLECTION;
+		}
 		~WeakValueType()
 		{
 			_Reset(true);
@@ -256,39 +284,81 @@ namespace StoryViewer
 		{
 			_Reset();
 			val_int = new int(_value_int);
+			type = INTEGER;
 		}
 		void operator=(const double& _value_double)
 		{
 			_Reset();
 			val_double = new double(_value_double);
+			type = DOUBLE;
 		}
 		void operator=(const String& _value_string)
 		{
 			_Reset();
 			val_string = new String(_value_string);
+			type = STRING;
 		}
 		void operator=(const wchar_t _value_string[])
 		{
 			_Reset();
 			val_string = new String(_value_string);
+			type = STRING;
 		}
-		bool operator==(const WeakValueType& _comp)
+		void operator=(const Collection& _value_collection)
 		{
-			return this->Type() == _comp.Type();
+			_Reset();
+			val_collection = new Collection(_value_collection);
+			type = COLLECTION;
+		}
+		void* ValAnyPtr() const
+		{
+			if (val_int) 
+				return val_int;
+			if (val_double)
+				return val_double;
+			if (val_string)
+				return val_string;
+			if (val_collection)
+				return val_collection;
+			return nullptr;
+		}
+		bool operator==(const WeakValueType& _comp) const
+		{
+			void* _va1 = this->ValAnyPtr();
+			void* _va2 = _comp.ValAnyPtr();
+			return this->Type() == _comp.Type() &&
+				(
+					*(int*)(_va1) == *(int*)(_va2) ||
+					*(double*)(_va1) == *(double*)(_va2) ||
+					*(String*)(_va1) == *(String*)(_va2) || 
+					*(StringList*)(_va1) == *(StringList*)(_va2)
+				);
+		}
+		bool operator!=(const WeakValueType& _comp) const
+		{
+			return !(this->operator==(_comp));
 		}
 		explicit operator int() const
 		{
+			PTR_VALIDATE(val_int);
 			return *val_int;
 		}
 		explicit operator double() const
 		{
+			PTR_VALIDATE(val_double);
 			return *val_double;
 		}
 		explicit operator String() const
 		{
+			PTR_VALIDATE(val_string);
 			return *val_string;
 		}
-		virtual String ToString() const override
+		explicit operator Collection() const
+		{
+			PTR_VALIDATE(val_collection);
+			return *val_collection;
+		}
+		virtual String ToString(bool _detailed = true) const override
 		{
 			String _ret{};
 			switch (this->type)
@@ -301,6 +371,21 @@ namespace StoryViewer
 				break;
 			case STRING:
 				_ret += (*val_string);
+				break;
+			case COLLECTION:
+				_ret += L"{";
+				if (val_collection->empty())
+				{
+					_ret += L"}";
+					break;
+				}
+				for (size_t _i = 0ull; _i < val_collection->size(); ++_i)
+				{
+					_ret += (*val_collection)[_i];
+					if (_i != val_collection->size() - 1)
+						_ret += L" , ";
+				}
+				_ret += L"}";
 				break;
 			}
 			return _ret;

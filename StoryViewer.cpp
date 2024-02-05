@@ -4,13 +4,6 @@
 #define _STORYVIEWER
 #endif
 
-#define MAKE_PTR(_Class,_Obj) _Class * _ptr_##_Obj = &_Obj
-#define PTR(_Obj) _ptr_##_Obj
-
-#define _Instance_
-#define _String_
-#define _Safe_Instance_(_Obj) _Obj&&
-
 using namespace StoryViewer;
 typedef Link<Character, Character> CharacterLink;
 
@@ -188,10 +181,39 @@ void Initialize()
 	// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
 }
 
+// #define DO_MAIN
+
+#define TEST
+
 int main()
 {
-	Initialize();
+#ifdef TINYXML2_TEST
+	tinyxml2::XMLDocument xdm{};
+	xdm.LoadFile("D:\\J_Ignite\\Documents\\Projects\\StoryViewer\\Test\\Test.xml");
+	// std::wcout << xdm.FirstChild()->Value() << std::endl;
+	tinyxml2::XMLNode* node_ptr = xdm.FirstChild()->FirstChild();
+	// std::wcout << node_ptr->Value() << std::endl << node_ptr->NextSibling()->Value();
+	xdm.Print();
+	system("pause");
+	// tinyxml2::XMLNode* nd = xdm.FirstChild();
+#endif
 
+#ifdef TEST
+	Initialize();
+	_Safe_Instance_(Character) Ivy = Character(L"艾薇", nullptr,
+		AttributeList{
+			{ L"性别", L"女"},
+			{ L"类型", L"建造者" }
+		}
+	);
+	Reference* I = new Reference(ADDRESSOF(Ivy), L"?");
+	std::wcout << I->ToString();
+
+#endif
+
+#ifndef TEST
+
+	Initialize();
 	_Safe_Instance_(Character) Ivy = Character(L"艾薇", nullptr,
 		AttributeList{ 
 			{ L"性别", L"女"},
@@ -200,22 +222,24 @@ int main()
 	);
 
 	_Safe_Instance_(Character) Vanessa = Character(L"凡妮莎", nullptr,
-		AttributeList{ 
+		AttributeList { 
 			{ L"性别", L"女" },
 			{ L"类型", L"建造者" },
-			{ L"瞳孔颜色", L"蓝"}
+			{ L"瞳孔颜色", L"蓝"},
+			{ L"性格", Collection { L"可爱", L"害羞" }}
 		}
 	);
 
 	MultiCharacter _m_Vanessa = _Instance_ Vanessa;
 
 	_Safe_Instance_(Character) VanessaB = Character(L"凡妮莎-恨意", nullptr,
-		new AttributeList{
+		new AttributeList {
 			{ L"性别", L"女" },
 			{ L"类型", L"建造者" },
 			{ L"瞳孔颜色", L"红"}
 		}
 	);
+	_Safe_Instance_(Character) Icey = Character(L"艾希", StringList {L"ICEY"});
 
 	_m_Vanessa.SetAsSubCharacter(_Instance_ VanessaB);
 
@@ -269,6 +293,7 @@ int main()
 	{
 		std::cerr << err.what();
 	}
-
+#endif
+	system("pause");
 	return 0;
 }

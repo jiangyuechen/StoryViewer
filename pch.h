@@ -13,3 +13,9 @@
 #include "Link.h"
 #include "DateTime.h"
 #include "Information.h"
+#include "Reference.h"
+
+// Third-Party Libs
+#include "ThirdPartyLibs/TinyXML2/tinyxml2.h"
+
+#define ADDRESSOF(_Obj) &_Obj

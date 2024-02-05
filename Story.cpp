@@ -296,7 +296,7 @@ CharacterCollection Story::AutoConfigureRelatedCharacter(Event* _tar_event)
 	return _ret;
 }
 
-String Story::ToString() const
+String Story::ToString(bool _detailed) const
 {
 	String _ret{};
 	_ret += L"<¹ÊÊÂ>";

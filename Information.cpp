@@ -77,7 +77,7 @@ bool Information::Open()
 	return ((intptr_t)_res > 32);
 }
 
-String Information::ToString() const
+String Information::ToString(bool _detailed) const
 {
 	String _ret{};
 	_ret += L"<нд╪Ч";
@@ -99,6 +99,8 @@ String Information::ToString() const
 		break;
 	}
 	_ret += L">";
+	if (!_detailed)
+		return _ret;
 	_ret += this->file_dir;
 	return _ret;
 }

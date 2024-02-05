@@ -96,7 +96,7 @@ namespace StoryViewer
 		{
 			return p_back;
 		}
-		virtual String ToString() _CONST override
+		virtual String ToString(bool _detailed = true) _CONST override
 		{
 			String _ret{};
 			if (this->link_type == UNORDERED)

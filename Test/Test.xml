@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Root>
+	<Story name="CYTUSII">
+		<Character name="Ivy">
+			<Aka aka="AEsir"></Aka>
+			<Aka aka="5"></Aka>
+			<Attribute key="性别" val="女"></Attribute>
+		</Character>
+	</Story>
+</Root>
+<!-- wdnmd -->

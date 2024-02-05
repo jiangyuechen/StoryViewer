@@ -169,7 +169,12 @@ bool DateTime::IsOddYear(time_t _year)
 		return (_year % 4ll == 0ll);
 }
 
-String DateTime::ToString() const
+void StoryViewer::DateTime::Refresh()
+{
+	// do nothing
+}
+
+String DateTime::ToString(bool _detailed) const
 {
 	String _ret{};
 	_ret += L"<ÈÕÆÚ>";
@@ -178,7 +183,7 @@ String DateTime::ToString() const
 
 // void DateTime::Refresh() = 0;
 
-String DTYearMonthDay::ToString() const
+String DTYearMonthDay::ToString(bool _detailed) const
 {
 	String _ret{};
 

@@ -39,9 +39,22 @@
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
+#define MAKE_PTR(_Class,_Obj) _Class * _ptr_##_Obj = &_Obj
+#define PTR(_Obj) _ptr_##_Obj
+
+#define _Instance_
+#define _String_
+#define _Safe_Instance_(_Obj) _Obj&&
+
+#define VAR_TO_STRING(_Str) #_Str
+
+#define PTR_VALIDATE(_Ptr) if (!_Ptr) { throw std::exception("Error : Empty Pointer!"); }
+
 constexpr size_t SIZE_T_MIN = 0;
 
 // typedef std::vector<std::pair<std::wstring, std::wstring>> AttributeList;
 
 typedef std::vector<std::wstring> StringList;
 typedef std::wstring String;
+
+// #define interface struct

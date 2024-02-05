@@ -22,6 +22,6 @@ namespace StoryViewer
 		}
 		Object() {}
 		virtual ~Object() {}
-		virtual String ToString() const { return L"<根类>"; }
+		virtual String ToString(bool _detailed = true) const { return L"<根类>"; }
 	};
 }

@@ -32,6 +32,6 @@ namespace StoryViewer
 		void AddCharacter(Character& _char);
 		bool ContainCharacter(const String& _name) const;
 
-		virtual String ToString() const override;
+		virtual String ToString(bool _detailed = true) const override;
 	};
 }

@@ -77,6 +77,6 @@ namespace StoryViewer
 
 		CharacterCollection AutoConfigureRelatedCharacter(Event* _tar_event);
 		
-		virtual String ToString() const override;
+		virtual String ToString(bool _detailed = true) const override;
 	};
 }
