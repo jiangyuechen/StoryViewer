@@ -65,8 +65,7 @@ namespace StoryViewer
 		bool ContainAKA(const String &_aka) const;
 		bool ContainKey(const String &_key) const;
 		
-		// Override
-		virtual String ToString(bool _detailed = true) const override;
+		virtual String ToString(int _style = 0) const override;
 
 
 #ifdef _USE_CHARACTER_LINKER_OPERATOR
@@ -89,7 +88,7 @@ namespace StoryViewer
 		String description;
 
 	private:
-		Link<Character, Character> _MakeLink(Character &_sub, LINKTYPE _type) const;
+		BasicLink<Character, Character> _MakeLink(Character &_sub, LINKTYPE _type) const;
 
 	public:
 		CharacterLinker();
@@ -97,8 +96,8 @@ namespace StoryViewer
 		~CharacterLinker();
 
 		// CharacterLinker operator[](const String& _desc);
-		Link<Character, Character> operator>>(Character &_main) const;
-		Link<Character, Character> operator>(Character &_main) const;
+		BasicLink<Character, Character> operator>>(Character &_main) const;
+		BasicLink<Character, Character> operator>(Character &_main) const;
 	};
 #endif
 	class CharacterAttributeAdder : public Object
@@ -110,7 +109,7 @@ namespace StoryViewer
 		CharacterAttributeAdder(Character* _tar_char, const String& _key);
 		void operator=(WeakValueType val);
 
-		virtual String ToString(bool _detailed = true) const override;
+		virtual String ToString(int _style = 0) const override;
 	};
 
 	class MultiCharacter : public Character
@@ -132,6 +131,6 @@ namespace StoryViewer
 		size_t Count() const;
 		void operator+=(Character&);
 
-		virtual String ToString(bool _detailed = true) const override;
+		virtual String ToString(int _style = 0) const override;
 	};
 }

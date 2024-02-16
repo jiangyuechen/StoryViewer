@@ -20,8 +20,22 @@ namespace StoryViewer
 			}
 			return false;
 		}
-		Object() {}
+		Object() noexcept {}
 		virtual ~Object() {}
-		virtual String ToString(bool _detailed = true) const { return L"<根类>"; }
+		virtual String ToString(int _style = 0) const { return L"<根类>"; }
 	};
+	//template <typename T>
+	//class Collection : public std::vector<T>
+	//{
+	//public:
+	//	bool Contains(T _target)
+	//	{
+	//		for (auto _iter = this->begin(); _iter != this->end(); ++_iter)
+	//		{
+	//			if ((*_iter) == _target)
+	//				return true;
+	//		}
+	//		return false;
+	//	}
+	//};
 }

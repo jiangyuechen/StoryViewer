@@ -5,11 +5,11 @@
 #endif
 
 using namespace StoryViewer;
-typedef Link<Character, Character> CharacterLink;
+typedef BasicLink<Character, Character> CharacterLink;
 
 #ifdef __USE_BASIC_WOSTREAM
 std::wostream& operator<<(std::wostream& _wcout, const AttributeList& _attr_list);
-std::wostream& operator<<(std::wostream& _wcout, Link<Character, Character>& _link);
+std::wostream& operator<<(std::wostream& _wcout, BasicLink<Character, Character>& _link);
 std::wostream& operator<<(std::wostream& _wcout, Event& _event);
 std::wostream& operator<<(std::wostream& _wcout, Event&& _event);
 std::wostream& operator<<(std::wostream& _wcout, Story& _story);
@@ -39,7 +39,7 @@ std::wostream& operator<<(std::wostream& _wcout, Character& _char)
 	return _wcout;
 }
 
-std::wostream& operator<<(std::wostream& _wcout, Link<Character, Character>& _link)
+std::wostream& operator<<(std::wostream& _wcout, BasicLink<Character, Character>& _link)
 {
 	if (_link.LinkType() == UNORDERED)
 		_wcout << L"<双向关系>";
@@ -183,11 +183,13 @@ void Initialize()
 
 // #define DO_MAIN
 
-#define TEST
+#define TEST 1
+
+#define __ENTRYPOINT__ 0
 
 int main()
 {
-#ifdef TINYXML2_TEST
+#if defined __ENTRYPOINT__ && __ENTRYPOINT__ == 2
 	tinyxml2::XMLDocument xdm{};
 	xdm.LoadFile("D:\\J_Ignite\\Documents\\Projects\\StoryViewer\\Test\\Test.xml");
 	// std::wcout << xdm.FirstChild()->Value() << std::endl;
@@ -198,7 +200,7 @@ int main()
 	// tinyxml2::XMLNode* nd = xdm.FirstChild();
 #endif
 
-#ifdef TEST
+#if defined __ENTRYPOINT__ && __ENTRYPOINT__ == 1
 	Initialize();
 	_Safe_Instance_(Character) Ivy = Character(L"艾薇", nullptr,
 		AttributeList{
@@ -206,12 +208,16 @@ int main()
 			{ L"类型", L"建造者" }
 		}
 	);
-	Reference* I = new Reference(ADDRESSOF(Ivy), L"?");
-	std::wcout << I->ToString();
-
+	Object* X_Ivy = ADDRESSOF(Ivy);
+	Link x = Link(ADDRESSOF(Ivy), ADDRESSOF(Ivy));
+	std::wcout << x.GetFrontPtr()->ToString();
+	Character* L_Ivy = static_cast<Character*>(X_Ivy);
+	std::wcout << L_Ivy->Name();
+	Link cl(&Ivy, &Ivy, L"朋友", UNORDERED);
+	std::wcout << cl.GetFrontRef().ToString(1);
 #endif
 
-#ifndef TEST
+#if defined __ENTRYPOINT__ && __ENTRYPOINT__ == 0
 
 	Initialize();
 	_Safe_Instance_(Character) Ivy = Character(L"艾薇", nullptr,
@@ -265,8 +271,8 @@ int main()
 
 	Vanessa << L"V";
 
-	std::wcout << Vanessa.ToString();
-	Link<Character, Character> cl(&Ivy, &Vanessa, L"朋友", UNORDERED);
+	std::wcout << Vanessa.ToString(1);
+	Link cl(&Ivy, &Vanessa, L"朋友", UNORDERED);
 	std::wcout << cl.ToString();
 
 	Story CYTUSII(L"Cytus II");

@@ -174,7 +174,7 @@ void StoryViewer::DateTime::Refresh()
 	// do nothing
 }
 
-String DateTime::ToString(bool _detailed) const
+String DateTime::ToString(int _style) const
 {
 	String _ret{};
 	_ret += L"<ÈÕÆÚ>";
@@ -183,7 +183,7 @@ String DateTime::ToString(bool _detailed) const
 
 // void DateTime::Refresh() = 0;
 
-String DTYearMonthDay::ToString(bool _detailed) const
+String DTYearMonthDay::ToString(int _style) const
 {
 	String _ret{};
 

@@ -11,9 +11,9 @@ namespace StoryViewer
 		Object* ref_ptr;
 		Nullable<String> description;
 	public:
-		Reference() : Object(), ref_ptr(nullptr), description(nullptr) {}
-		Reference(Object* _ptr) : Object(), ref_ptr(_ptr), description(nullptr) {}
-		Reference(Object* _ptr, const String& _desc) : Object(), ref_ptr(_ptr), description(_desc) {}
+		Reference() noexcept : Object(), ref_ptr(nullptr), description(nullptr) {}
+		Reference(Object* _ptr) noexcept : Object(), ref_ptr(_ptr), description(nullptr) {}
+		Reference(Object* _ptr, const String& _desc) noexcept : Object(), ref_ptr(_ptr), description(_desc) {}
 		virtual ~Reference()
 		{
 			// do not delete ref_ptr!
@@ -40,7 +40,7 @@ namespace StoryViewer
 			ref_ptr = nullptr;
 			ref_ptr = _new_ptr;
 		}
-		virtual String ToString(bool _detailed = true) const
+		virtual String ToString(int _style = 0) const
 		{
 			String _ret{};
 			_ret += L"<ÒýÓÃ>";
@@ -51,7 +51,7 @@ namespace StoryViewer
 			else
 			{
 				_ret += L"->";
-				_ret += ref_ptr->ToString(false);
+				_ret += ref_ptr->ToString(LEAST_DETAILED);
 			}
 			return _ret;
 		}

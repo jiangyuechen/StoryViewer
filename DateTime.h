@@ -48,7 +48,7 @@ namespace StoryViewer
 		static bool use_typical_calendar;
 		virtual void Refresh() /* = 0 */;
 		
-		virtual String ToString(bool _detailed = true) const override;
+		virtual String ToString(int _style = 0) const override;
 	};
 	
 	class DTYearMonthDay : public DateTime
@@ -74,6 +74,6 @@ namespace StoryViewer
 		DTYearMonthDay NextDay(size_t _multiple = 1);
 		DTYearMonthDay PrevDay(size_t _multiple = 1);
 
-		virtual String ToString(bool _detailed = true) const override;
+		virtual String ToString(int _style = 0) const override;
 	};
 }

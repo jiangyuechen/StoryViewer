@@ -12,11 +12,11 @@
 
 typedef std::list<StoryViewer::Event*> StoryLinkedList;
 typedef std::vector<StoryViewer::Character*> CharacterCollection;
-typedef std::vector<StoryViewer::Link<StoryViewer::Event, StoryViewer::Event>*> EventLinkTable;
-typedef std::vector<StoryViewer::Link<StoryViewer::Character, StoryViewer::Character>*> CharacterLinkTable;
+typedef std::vector<StoryViewer::Link*> EventLinkTable;
+typedef std::vector<StoryViewer::Link*> CharacterLinkTable;
 typedef std::function<bool(StoryViewer::Event)> EventFilter;
 typedef std::function<bool(StoryViewer::Character)> CharacterFilter;
-typedef std::function<bool(StoryViewer::Link<StoryViewer::Character, StoryViewer::Character>)> CharacterLinkFilter;
+typedef std::function<bool(StoryViewer::Link)> CharacterLinkFilter;
 
 namespace StoryViewer
 {
@@ -66,17 +66,17 @@ namespace StoryViewer
 		bool DeleteCharacterByAttribute(const Attribute& _kv);
 		void ClearCharacter();
 
-		void AddCharacterLink(Link<Character, Character>* _p_link);
-		// bool DeleteCharacterLink(Link<Character, Character>* _p_tar_link);
+		void AddCharacterLink(Link* _p_link);
+		// bool DeleteCharacterLink(BasicLink<Character, Character>* _p_tar_link);
 		bool DeleteCharacterLinkByFilter(CharacterLinkFilter _condition, bool _once = true);
 		CharacterLinkTable FilterCharacterLink(CharacterLinkFilter _condition);
 
 		Story& operator<<(Character& _tar_char);
 		Story& operator<<(Event& _tar_event);
-		Story& operator<<(Link<Character, Character>& _tar_link);
+		Story& operator<<(Link& _tar_link);
 
 		CharacterCollection AutoConfigureRelatedCharacter(Event* _tar_event);
 		
-		virtual String ToString(bool _detailed = true) const override;
+		virtual String ToString(int _style = 0) const override;
 	};
 }

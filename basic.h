@@ -58,3 +58,7 @@ typedef std::vector<std::wstring> StringList;
 typedef std::wstring String;
 
 // #define interface struct
+
+#define LEAST_DETAILED 0
+#define NORMAL_DETAILED 1
+#define MOST_DETAILED 2

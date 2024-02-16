@@ -58,7 +58,7 @@ bool Event::ContainCharacter(const String& _name) const
 	return false;
 }
 
-String Event::ToString(bool _detailed) const
+String Event::ToString(int _style) const
 {
 	String _ret{};
 	_ret += L"<ÊÂ¼þ>[";

@@ -52,12 +52,12 @@ bool Character::ContainKey(const String& _key) const
 	return false;
 }
 
-String Character::ToString(bool _detailed) const
+String Character::ToString(int _style) const
 {
 	String _ret{};
 	_ret += L"<角色>";
 	_ret += this->name;
-	if (!_detailed)
+	if (!_style)
 		return _ret;
 	if (this->aka.size() != 0)
 	{
@@ -242,16 +242,16 @@ CharacterLinker::~CharacterLinker()
 	this->main = nullptr;
 }
 
-Link<Character, Character> CharacterLinker::_MakeLink(Character& _sub, LINKTYPE _type) const
+BasicLink<Character, Character> CharacterLinker::_MakeLink(Character& _sub, LINKTYPE _type) const
 {
-	return Link<Character, Character>(&_sub, this->main, this->description, _type);
+	return BasicLink<Character, Character>(&_sub, this->main, this->description, _type);
 }
-Link<Character, Character> CharacterLinker::operator>>(Character& _main) const
+BasicLink<Character, Character> CharacterLinker::operator>>(Character& _main) const
 {
 	return _MakeLink(_main, ORDERED);
 }
 
-Link<Character, Character> StoryViewer::CharacterLinker::operator>(Character& _main) const
+BasicLink<Character, Character> StoryViewer::CharacterLinker::operator>(Character& _main) const
 {
 	return _MakeLink(_main, UNORDERED);
 }
@@ -321,7 +321,7 @@ void MultiCharacter::operator+=(Character& _tar_char)
 	this->SetAsSubCharacter(_tar_char);
 }
 
-String MultiCharacter::ToString(bool _detailed) const
+String MultiCharacter::ToString(int _style) const
 {
 	String _ret{};
 	_ret += L"<多元角色>";
@@ -341,7 +341,7 @@ String MultiCharacter::ToString(bool _detailed) const
 	return _ret;
 }
 
-String CharacterAttributeAdder::ToString(bool _detailed) const
+String CharacterAttributeAdder::ToString(int _style) const
 {
 	String _ret{};
 	_ret += L"<角色属性添加器>\n";

@@ -237,7 +237,7 @@ void Story::ClearCharacter()
 	story_characters.clear();
 }
 
-void Story::AddCharacterLink(Link<Character, Character>* _p_link)
+void Story::AddCharacterLink(Link* _p_link)
 {
 	this->story_character_links.push_back(_p_link);
 }
@@ -284,7 +284,7 @@ Story& Story::operator<<(Event& _tar_event)
 	return *this;
 }
 
-Story& Story::operator<<(Link<Character, Character>& _tar_link)
+Story& Story::operator<<(Link& _tar_link)
 {
 	this->AddCharacterLink(&_tar_link);
 	return *this;
@@ -296,7 +296,7 @@ CharacterCollection Story::AutoConfigureRelatedCharacter(Event* _tar_event)
 	return _ret;
 }
 
-String Story::ToString(bool _detailed) const
+String Story::ToString(int _style) const
 {
 	String _ret{};
 	_ret += L"<¹ÊÊÂ>";

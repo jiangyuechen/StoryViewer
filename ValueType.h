@@ -358,7 +358,7 @@ namespace StoryViewer
 			PTR_VALIDATE(val_collection);
 			return *val_collection;
 		}
-		virtual String ToString(bool _detailed = true) const override
+		virtual String ToString(int _style = 0) const override
 		{
 			String _ret{};
 			switch (this->type)

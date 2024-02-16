@@ -37,7 +37,7 @@ namespace StoryViewer
 
 		bool Open();
 
-		virtual String ToString(bool _detailed = true) const override;
+		virtual String ToString(int _style = 0) const override;
 
 	};
 }
