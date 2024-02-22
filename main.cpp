@@ -5,7 +5,6 @@
 #endif
 
 using namespace StoryViewer;
-typedef BasicLink<Character, Character> CharacterLink;
 
 #ifdef __USE_BASIC_WOSTREAM
 std::wostream& operator<<(std::wostream& _wcout, const AttributeList& _attr_list);
@@ -181,15 +180,11 @@ void Initialize()
 	// SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
 }
 
-// #define DO_MAIN
-
-#define TEST 1
-
 #define __ENTRYPOINT__ 0
 
 int main()
 {
-#if defined __ENTRYPOINT__ && __ENTRYPOINT__ == 2
+#if __ENTRYPOINT__ == 2
 	tinyxml2::XMLDocument xdm{};
 	xdm.LoadFile("D:\\J_Ignite\\Documents\\Projects\\StoryViewer\\Test\\Test.xml");
 	// std::wcout << xdm.FirstChild()->Value() << std::endl;
@@ -200,10 +195,10 @@ int main()
 	// tinyxml2::XMLNode* nd = xdm.FirstChild();
 #endif
 
-#if defined __ENTRYPOINT__ && __ENTRYPOINT__ == 1
+#if __ENTRYPOINT__ == 1
 	Initialize();
-	_Safe_Instance_(Character) Ivy = Character(L"艾薇", nullptr,
-		AttributeList{
+	_Safe_Instance_(Character) Ivy = Character(L"艾薇",
+		{
 			{ L"性别", L"女"},
 			{ L"类型", L"建造者" }
 		}
@@ -217,18 +212,18 @@ int main()
 	std::wcout << cl.GetFrontRef().ToString(1);
 #endif
 
-#if defined __ENTRYPOINT__ && __ENTRYPOINT__ == 0
+#if __ENTRYPOINT__ == 0
 
 	Initialize();
-	_Safe_Instance_(Character) Ivy = Character(L"艾薇", nullptr,
-		AttributeList{ 
+	_Safe_Instance_(Character) Ivy = Character(L"艾薇",
+		{ 
 			{ L"性别", L"女"},
 			{ L"类型", L"建造者" }
 		}
 	);
 
-	_Safe_Instance_(Character) Vanessa = Character(L"凡妮莎", nullptr,
-		AttributeList { 
+	_Safe_Instance_(Character) Vanessa = Character(L"凡妮莎",
+		{ 
 			{ L"性别", L"女" },
 			{ L"类型", L"建造者" },
 			{ L"瞳孔颜色", L"蓝"},
@@ -238,25 +233,25 @@ int main()
 
 	MultiCharacter _m_Vanessa = _Instance_ Vanessa;
 
-	_Safe_Instance_(Character) VanessaB = Character(L"凡妮莎-恨意", nullptr,
-		new AttributeList {
+	_Safe_Instance_(Character) VanessaB = Character(L"凡妮莎-恨意",
+		{
 			{ L"性别", L"女" },
 			{ L"类型", L"建造者" },
 			{ L"瞳孔颜色", L"红"}
 		}
 	);
-	_Safe_Instance_(Character) Icey = Character(L"艾希", StringList {L"ICEY"});
+	_Safe_Instance_(Character) Icey = Character(L"艾希", {});
 
 	_m_Vanessa.SetAsSubCharacter(_Instance_ VanessaB);
 
-	_Safe_Instance_(Character) Paff = Character(L"Paff", nullptr,
-		new AttributeList{
+	_Safe_Instance_(Character) Paff = Character(L"Paff",
+		{
 			{ L"性别",  L"女" },
 			{ L"类型", L"人类" },
 			{ L"身份", 2 }
 		});
 
-	_Safe_Instance_(Character) Aroma = Character(L"Aroma", nullptr,
+	_Safe_Instance_(Character) Aroma = Character(L"Aroma",
 		new AttributeList {
 			{ L"性别", L"女" },
 			{ L"类型", L"人类" },
@@ -265,40 +260,32 @@ int main()
 	);
 
 	MultiCharacter _m_Paff = _Instance_ Paff;
+
 	_m_Paff.SetAsSubCharacter(_Instance_ Aroma);
 
 	Ivy << L"AEsir" << L"IV";
 
 	Vanessa << L"V";
 
-	std::wcout << Vanessa.ToString(1);
-	Link cl(&Ivy, &Vanessa, L"朋友", UNORDERED);
-	std::wcout << cl.ToString();
-
 	Story CYTUSII(L"Cytus II");
 
-	CYTUSII << Ivy << Vanessa << VanessaB << Paff; // 天才！
+	CYTUSII << Ivy << Vanessa << VanessaB;
 
-	std::wcout << CYTUSII.ToString();
+	StoryManager _sm_CYTUSII(ADDRESSOF(CYTUSII));
+
+	Action* act = new AddAkaAction(ADDRESSOF(Vanessa), L"5");
+
+	_sm_CYTUSII.PushAction(act);
 	
-	CYTUSII.DeleteCharacterByFilter([](Character c) { return c.ContainAKA(L"AEsir"); });
-
-	std::wcout << CYTUSII.ToString();
-
-	DateTime* date = new DTYearMonthDay(2023, 12, 8);
-
-	Information rds = Information(L"D:\\J_Ignite\\Pictures\\avatar1.png");
+	std::wcout << Vanessa.ToString(MOST_DETAILED);
 	
-	std::wcout << rds.ToString();
+	_sm_CYTUSII.PopAction();
 
-	try
-	{
-		rds.Open();
-	}
-	catch (std::exception& err)
-	{
-		std::cerr << err.what();
-	}
+	std::wcout << Vanessa.ToString(MOST_DETAILED);
+
+	std::wcout << _sm_CYTUSII.ToString(MOST_DETAILED);
+
+
 #endif
 	system("pause");
 	return 0;

@@ -300,26 +300,32 @@ String Story::ToString(int _style) const
 {
 	String _ret{};
 	_ret += L"<故事>";
+	if (_style == LEAST_DETAILED)
+	{
+		_ret += this->story_name;
+		return _ret;
+	}
+
 	_ret += this->story_name;
 	_ret += L"\n角色:\n";
 	for (const auto& _sc_iter : this->story_characters)
 	{
 		_ret += L"    ";
-		_ret += _sc_iter->ToString();
+		_ret += _sc_iter->ToString(_style);
 		_ret += L"\n";
 	}
 	_ret += L"\n角色关系:\n";
 	for (const auto& _scl_iter : this->story_character_links)
 	{
 		_ret += L"    ";
-		_ret += _scl_iter->ToString();
+		_ret += _scl_iter->ToString(_style);
 		_ret += L"\n";
 	}
 	_ret += L"\n故事线:\n";
 	for (const auto& _sl_iter : this->story_events)
 	{
 		_ret += L"    ";
-		_ret += _sl_iter->ToString();
+		_ret += _sl_iter->ToString(_style);
 		_ret += L"\n";
 	}
 	return _ret;

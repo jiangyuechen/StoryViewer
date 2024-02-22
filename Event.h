@@ -34,4 +34,5 @@ namespace StoryViewer
 
 		virtual String ToString(int _style = 0) const override;
 	};
+
 }

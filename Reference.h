@@ -19,19 +19,19 @@ namespace StoryViewer
 			// do not delete ref_ptr!
 			ref_ptr = nullptr;
 		}
-		Object Val()
+		Object Val() const
 		{
 			return *ref_ptr;
 		}
-		Object* ValPtr()
+		Object* ValPtr() const
 		{
 			return ref_ptr;
 		}
-		Object& ValRef()
+		Object& ValRef() _MUTABLE
 		{
 			return *ref_ptr;
 		}
-		Object*& ValPtrRef()
+		Object*& ValPtrRef() _MUTABLE
 		{
 			return ref_ptr;
 		}

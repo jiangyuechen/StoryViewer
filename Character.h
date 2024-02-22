@@ -24,7 +24,7 @@ namespace StoryViewer
 	typedef std::vector<StoryViewer::Character*> CharacterCollection;
 	typedef std::pair<std::wstring, WeakValueType> Attribute;
 	typedef std::vector<std::pair<String, WeakValueType>> AttributeList;
-	
+
 	class Character : public Object
 	{
 	protected:
@@ -35,10 +35,14 @@ namespace StoryViewer
 	public:
 		Character();
 		Character(
-			const String &_name,
-			Nullable<StringList> _p_aka = nullptr,
-			Nullable<AttributeList> _p_attributes = nullptr);
+			const String& _name,
+			Nullable<AttributeList> _p_attributes = nullptr,
+			Nullable<StringList> _p_aka = nullptr);
 
+		Character(
+			const String& _name,
+			std::initializer_list<std::pair<String, WeakValueType>> _p_attr_list,
+			Nullable<StringList> _p_aka = nullptr);
 		virtual ~Character();
 
 		String &Name();
@@ -61,8 +65,9 @@ namespace StoryViewer
 		void ClearAttribute();
 
 		bool AddAKA(const String &_aka);
-
 		bool ContainAKA(const String &_aka) const;
+		bool RemoveAKA(const String& _aka);
+
 		bool ContainKey(const String &_key) const;
 		
 		virtual String ToString(int _style = 0) const override;

@@ -7,6 +7,20 @@
 
 namespace StoryViewer
 {
+	static void TOSTRING_APPEND(String& _ret, size_t _num, ...)
+	{
+		va_list _appender;
+		va_start(_appender, _num);
+
+		for (size_t _i = 0; _i < _num; ++_i)
+		{
+			String _nxt_arg = va_arg(_appender, String);
+			_ret.append(_nxt_arg);
+		}
+
+		va_end(_appender);
+	}
+
 	class Object
 	{
 	public:
@@ -22,7 +36,7 @@ namespace StoryViewer
 		}
 		Object() noexcept {}
 		virtual ~Object() {}
-		virtual String ToString(int _style = 0) const { return L"<根类>"; }
+		virtual String ToString(DETAIL_TYPE _style = 0) const { return L"<根类>"; }
 	};
 	//template <typename T>
 	//class Collection : public std::vector<T>

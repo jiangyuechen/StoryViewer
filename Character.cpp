@@ -15,12 +15,19 @@ Character::Character()
 }
 
 Character::Character(const String& _name,
-	Nullable<StringList> _p_aka,
-	Nullable<AttributeList> _p_attributes)
+	Nullable<AttributeList> _p_attributes,
+	Nullable<StringList> _p_aka)
 {
 	name = _name;
 	aka = !_p_aka.IsNull() ? _p_aka.Val() : StringList();
 	attributes = !_p_attributes.IsNull() ? _p_attributes.Val() : AttributeList();
+}
+
+StoryViewer::Character::Character(const String& _name, std::initializer_list<std::pair<String, WeakValueType>> _p_attr_list, Nullable<StringList> _p_aka)
+{
+	name = _name;
+	aka = StringList();
+	attributes = AttributeList(_p_attr_list.begin(), _p_attr_list.end());
 }
 
 Character::~Character()
@@ -196,6 +203,19 @@ bool Character::ContainAKA(const String& _aka) const
 	return false;
 }
 
+bool Character::RemoveAKA(const String& _aka)
+{
+	for (auto _iter = aka.begin(); _iter != aka.end(); ++_iter)
+	{
+		if (*_iter == _aka)
+		{
+			aka.erase(_iter);
+			return true;
+		}
+	}
+	return false;
+}
+
 #ifdef _USE_CHARACTER_LINKER_OPERATOR
 CharacterLinker Character::operator[](const String& _desc)
 {
@@ -274,7 +294,7 @@ MultiCharacter::MultiCharacter(
 	Nullable<StringList> _p_aka,
 	Nullable<AttributeList> _p_attributes,
 	Nullable<CharacterCollection> _p_sub_characters)
-	: Character(_name, _p_aka, _p_attributes)
+	: Character(_name, _p_attributes, _p_aka)
 {
 	sub_characters = !_p_sub_characters.IsNull() ? _p_sub_characters.Val() : CharacterCollection();
 }

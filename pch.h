@@ -14,6 +14,9 @@
 #include "DateTime.h"
 #include "Information.h"
 #include "Reference.h"
+#include "StoryManager.h"
+#include "Action.h"
+#include "Capture.h"
 
 // Third-Party Libs
 #include "ThirdPartyLibs/TinyXML2/tinyxml2.h"
